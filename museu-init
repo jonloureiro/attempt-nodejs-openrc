@@ -1,0 +1,33 @@
+#!/sbin/openrc-run
+
+name=$RC_SVCNAME
+command=/usr/bin/yarn start
+directory=/var/www/$name/
+pidfile=/run/$RC_SVCNAME/$RC_SVCNAME.pid
+
+depend(){
+    need net
+}
+
+start() {
+    ebegin "Starting ${name}"
+    start-stop-daemon --start \
+        -d "${directory}" \
+        --exec ${command} \
+        --pidfile ${pidfile} \
+    eend $?
+}
+
+stop() {
+    ebegin "Stopping ${name}"
+    start-stop-daemon --stop \
+        --pidfile ${pidfile} \
+    eend $?
+}
+
+reload() {
+    ebegin "Restarting ${name}"
+        kill -HUP ${pidfile}
+        start
+    eend $?
+}
