@@ -12,7 +12,8 @@ start() {
     start-stop-daemon --start \
         -d "${directory}" \
         --exec /usr/bin/node src/index.js \
-        --pidfile ${pidfile}
+        --pidfile ${pidfile} \
+        --background
     eend $?
 }
 
