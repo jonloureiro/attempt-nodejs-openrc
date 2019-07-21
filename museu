@@ -1,8 +1,6 @@
 #!/sbin/openrc-run
 
-name=$RC_SVCNAME
-command=/usr/bin/yarn start
-directory=/var/www/$name/
+directory=/var/www/$RC_SVCNAME/
 pidfile=/run/$RC_SVCNAME/$RC_SVCNAME.pid
 
 depend(){
@@ -10,23 +8,23 @@ depend(){
 }
 
 start() {
-    ebegin "Starting ${name}"
+    ebegin "Starting ${RC_SVCNAME}"
     start-stop-daemon --start \
         -d "${directory}" \
-        --exec ${command} \
-        --pidfile ${pidfile} \
+        --exec /usr/bin/node src/index.js \
+        --pidfile ${pidfile}
     eend $?
 }
 
 stop() {
-    ebegin "Stopping ${name}"
+    ebegin "Stopping ${RC_SVCNAME}"
     start-stop-daemon --stop \
         --pidfile ${pidfile} \
     eend $?
 }
 
 reload() {
-    ebegin "Restarting ${name}"
+    ebegin "Restarting ${RC_SVCNAME}"
         kill -HUP ${pidfile}
         start
     eend $?
